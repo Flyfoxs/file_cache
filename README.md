@@ -4,6 +4,9 @@
 - It also support to log the function time cost and parameters
 
 
+## Installation
+pip install file_cache
+
 ## Sample case
 
 
@@ -23,29 +26,13 @@ normal_df = test_cache_normal('Felix')
 normal_df.head()
 ```
 
-    2018-12-25 22:40:42,026 util_log.py[61] DEBUG Start the program at:LALI2-M-G0MD, 127.0.0.1, with:Load module
-    2018-12-25 22:40:42,029 util_log.py[41] INFO Begin:test_cache_normal(1 paras) with:['Felix'], []
-    2018-12-25 22:40:42,178 cache.py[29] DEBUG try to read cache from file:./cache/test_cache_normal=Felix=.h5, (h5, key:['/df_0'])
-    2018-12-25 22:40:42,189 util_log.py[49] INFO Cost:   0.16 sec:'test_cache_normal'(1 paras)(['Felix'], []), return:DataFrame, end 
-
+  
 
 
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
+ 
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -101,10 +88,7 @@ print(df0 , '\n')
 print(df1)
 ```
 
-    2018-12-25 22:40:42,227 util_log.py[41] INFO Begin:test_cache_tuple(1 paras) with:['Felix2'], []
-    2018-12-25 22:40:42,252 cache.py[29] DEBUG try to read cache from file:./cache/test_cache_tuple=Felix2=.h5, (h5, key:['/df_0', '/df_1'])
-    2018-12-25 22:40:42,273 util_log.py[49] INFO Cost:   0.05 sec:'test_cache_tuple'(1 paras)(['Felix2'], []), return:tuple, end 
-
+ 
 
         0   1   2   3   4
     0   5   6   7   8   9
@@ -130,12 +114,7 @@ ignore = test_cache_ignore(df)
 
 ```
 
-    2018-12-25 22:40:42,302 util_log.py[41] INFO Begin:test_cache_ignore(1 paras) with:['DataFrame'], []
-    2018-12-25 22:40:42,307 cache.py[112] DEBUG There is DataFrame in the args
-    2018-12-25 22:40:42,309 cache.py[94] WARNING Don not support cache for fn:test_cache_ignore, para:DataFrame, kw:{}
-    2018-12-25 22:40:42,312 util_log.py[49] INFO Cost:   0.01 sec:'test_cache_ignore'(1 paras)(['DataFrame'], []), return:DataFrame, end 
-
-
+ 
 ## Log the function time and parameter
 
 
@@ -148,9 +127,6 @@ def log_time(arg):
 print(log_time("hello"))
 ```
 
-    2018-12-25 22:40:42,332 util_log.py[41] INFO Begin:log_time(1 paras) with:['hello'], []
-    2018-12-25 22:40:42,339 util_log.py[49] INFO Cost:   0.01 sec:'log_time'(1 paras)(['hello'], []), return:hello msg, end 
-
-
+ 
     hello msg
 

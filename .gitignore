@@ -1,0 +1,13 @@
+.idea
+bin
+**/*.egg-info
+**/vcs.xml
+.*
+**/.idea
+**/__pycache__
+**/ipynb_checkpoints
+**/log
+**/nohup.*
+dist
+cache
+build

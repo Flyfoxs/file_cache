@@ -38,13 +38,13 @@ def timed(logger=logger, level=None, format='%s: %s ms', paras=True):
             kwargs_mini = [ (k, v ) if is_mini_args(v) else (k, type(v).__name__) for k, v in kwargs.items()]
             arg_count = len(args) + len(kwargs)
             if paras:
-                logger.info("Begin:%s(%s paras) with:%r, %r" % (fn.__name__, arg_count, args_mini, kwargs_mini))
+                logger.info("%s begin with(%s paras) :%r, %r" % (fn.__name__, arg_count, args_mini, kwargs_mini))
             else:
-                logger.info(f"Begin:{fn.__name__} with {arg_count} paras")
+                logger.info(f"{fn.__name__} begin with {arg_count} paras")
             result = fn(*args, **kwargs)
             duration = time.time() - start
-            logging.info('Cost:%7.2f sec:%r(%s paras)(%r, %r), return:%s, end '
-                         % (duration, fn.__name__, arg_count,
+            logging.info('%s cost %7.2f sec:(%s paras)(%r, %r), return:%s, end '
+                         % (fn.__name__,duration,  arg_count,
                             args_mini, kwargs_mini,
                             result if isinstance(result, (str, int, float)) else type(result).__name__,
                             ))

@@ -72,7 +72,7 @@ if __name__ == '__main__':
         import numpy as np
         data = datasets.load_boston()
         df = pd.DataFrame(data.data, columns=data.feature_names)
-        return df
+        return df, df.copy(), df.copy()
 
 
-    test_df('xx')
+    logger.debug(len(test_df('xx')))

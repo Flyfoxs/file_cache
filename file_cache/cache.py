@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 from file_cache.utils.util_log import *
-
+from file_cache.utils.reduce_mem import reduce_mem
 
 class Cache_File:
     def __init__(self):
@@ -26,7 +26,7 @@ class Cache_File:
                 if file_type == 'h5':
                     with pd.HDFStore(path, mode='r') as store:
                         key_list = store.keys()
-                    logger.debug(f"try to read cache from file:{path}, ({file_type}, key:{key_list})")
+                    logger.debug(f"Read cache from file:{path},key:{key_list}")
                     if len(key_list) == 0:
                         return None
                     elif len(key_list) == 1 :
@@ -77,6 +77,7 @@ def file_cache(overwrite=False, type='h5', prefix=None):
     """
     def decorator(f):
         @timed()
+        @reduce_mem()
         @functools.wraps(f)
         def wrapper(*args, **kwargs):
 

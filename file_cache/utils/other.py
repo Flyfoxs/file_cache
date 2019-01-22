@@ -3,7 +3,6 @@ import pandas as pd
 
 from file_cache.utils.util_log import *
 
-
 def replace_invalid_filename_char(filename):
     invalid_characaters = '\':"<>|{} ,'
     for char in invalid_characaters:
@@ -27,7 +26,7 @@ def is_mini_args(item):
 
 def get_pretty_info(args):
     if isinstance(args,(list, tuple)) and len(args)>0:
-        mini =  [item if is_mini_args(item) else type(item).__name__ for item in args]
+        mini =  [str(item) if is_mini_args(item) else type(item).__name__ for item in args]
         return ','.join(mini)
     elif isinstance(args, (dict)) and len(args)>0:
         mini = [f'{k}={v}' if is_mini_args(v) else f'{k}={type(v).__name__}' for k, v in args.items()]

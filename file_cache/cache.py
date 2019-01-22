@@ -77,7 +77,6 @@ def file_cache(overwrite=False, type='h5', prefix=None):
     """
     def decorator(f):
         @timed()
-        @reduce_mem()
         @functools.wraps(f)
         def wrapper(*args, **kwargs):
 

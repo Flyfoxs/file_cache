@@ -1,7 +1,6 @@
 
 import logging
 
-from file_cache.utils.other import get_pretty_info
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
@@ -19,6 +18,7 @@ def is_mini_args(item):
 
 
 def get_mini_args(args):
+    from file_cache.utils.other import get_pretty_info
     return get_pretty_info(args)
 
 

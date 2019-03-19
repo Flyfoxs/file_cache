@@ -15,7 +15,7 @@ def is_mini_args(item):
         return True
     if '__len__' in dir(item) and len(item) >=20:
         return False
-    elif (type(item) in (tuple, list, dict) and len(item) <= 20) :
+    elif isinstance(item, (tuple, list, pd.Series, dict)) and len(item) <= 20 :
         return True
     elif type(item) in (tuple, list, dict, pd.DataFrame, pd.SparseDataFrame):
         return False
@@ -27,10 +27,10 @@ def is_mini_args(item):
 def get_pretty_info(args):
     if isinstance(args,(list, tuple)) and len(args)>0:
         mini =  [str(item) if is_mini_args(item) else type(item).__name__ for item in args]
-        return ','.join(mini)
+        return replace_useless_mark(','.join(mini))
     elif isinstance(args, (dict)) and len(args)>0:
         mini = [f'{k}={v}' if is_mini_args(v) else f'{k}={type(v).__name__}' for k, v in args.items()]
-        return ','.join(mini)
+        return replace_useless_mark(','.join(mini))
     elif '__len__' in dir(args) and len(args)==0:
         return ''
     elif isinstance(args, (str, float, int)):
@@ -38,7 +38,15 @@ def get_pretty_info(args):
     elif args is None:
         return 'None'
     else:
-        return type(args).__name__
+        return replace_useless_mark(type(args).__name__)
+
+
+def replace_useless_mark(input : str):
+    input = str(input)
+    input = input.replace('\t', ' ')
+    input = input.replace('\n', ' ')
+    input = input.replace('  ', ' ')
+    return input
 
 
 def get_all_file(path):

@@ -1,7 +1,7 @@
 
 import logging
 
-from file_cache.utils.other import replace_useless_mark
+
 
 format_str = '%(asctime)s %(thread)d %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
@@ -27,7 +27,7 @@ def get_mini_args(args):
 import functools
 import time
 def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
-
+    from file_cache.utils.other import replace_useless_mark
     if level.lower() == 'info':
         log = logger.info
     else:

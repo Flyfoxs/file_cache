@@ -6,7 +6,6 @@ import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
 
-from file_cache.utils.other import replace_invalid_filename_char
 from file_cache.utils.util_log import logger, timed
 try:
     plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
@@ -94,6 +93,7 @@ def save_result_for_ensemble(sub_folder, file_name, **kwargs, ):
         os.makedirs(folder)
 
     file = f'./output/1level/{sub_folder}/{file_name}.h5'
+    from file_cache.utils.other import replace_invalid_filename_char
     file = replace_invalid_filename_char(file)
     store = pd.HDFStore(file)
 

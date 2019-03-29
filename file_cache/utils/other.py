@@ -41,11 +41,10 @@ def get_pretty_info(args):
         return replace_useless_mark(type(args).__name__)
 
 
-def replace_useless_mark(input : str):
+def replace_useless_mark(input : str, replace_list = ['\t', '\n','  '], new_val = ' '):
     input = str(input)
-    input = input.replace('\t', ' ')
-    input = input.replace('\n', ' ')
-    input = input.replace('  ', ' ')
+    for old in replace_list:
+        input = input.replace(old, new_val)
     return input
 
 

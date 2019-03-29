@@ -2,8 +2,7 @@
 import logging
 
 
-
-format_str = '%(asctime)s %(thread)d %(filename)s[%(lineno)d] %(levelname)s %(message)s'
+format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
 logging.basicConfig(level=logging.DEBUG, format=format_str)
 

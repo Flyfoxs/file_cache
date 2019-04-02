@@ -1,13 +1,13 @@
 
-# 特征工程利器(通过本地文件,缓存加速特征生成)
+# 特征工程利器(通过本地文件缓存, 加速特征生成)
 - 通过一行代码缓存你的Dataframe或者Series结果, 即使是返回多个DF或者Series也可以. 特别适合一个函数运行了很久计算出来的特征.
 - 同时也支持显示函数的运行参数和运行的实际时间
 
 
-## Installation
+## 安装
 pip install file_cache
 
-## Sample case
+## 简单示例
 
 
 ```python

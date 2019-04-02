@@ -1,7 +1,7 @@
 
-# 特征工程利器(通过文件缓存加速你的特征生成)
-- 通过一行代码缓存你的Dataframe或者Series结果, 即使是返回多个DF或者Series也可以. 特别适合一个函数运行了很久计算出来的特征.
-- 同时也支持显示函数的运行参数和运行的实际时间
+# File Case
+- This is used to cache the Dataframe result, even there are multiply Dataframe, which can help to reduce the huge time in feature engineering
+- It also support to log the function time cost and parameters
 
 
 ## Installation
@@ -65,8 +65,8 @@ normal_df.head()
 
 
 
-## 函数同时返回了多个DataFrame
-
+## Return mulpiple DF with tuple
+Support to cache multiple DF with tuple
 
 
 ```python
@@ -96,9 +96,9 @@ print(df1)
     1  25  26  27  28  29
 
 
-## 如果入参不能缓存,比如如果入参是一个DataFrame
+## For the input paras can not be cached
+If the input is DF or cannot be hashed, ignore the cache, run the function directly
 
-这样的缓存没有意义,这样的缓存会自动忽视,不会造成任何运行异常,只是无法优化性能
 
 ```python
 @file_cache()
@@ -112,7 +112,7 @@ ignore = test_cache_ignore(df)
 ```
  
 
-## 自动记录函数的运行参数和消耗的时间
+## Log the function time and parameter
 
 
 ```python
@@ -132,7 +132,7 @@ print(log_time("hello"))
     hello msg
 
 
-## 不仅支持DataFrame,同时也支持Series
+## Not only support DataFrame, but also support Series
 
 
 ```python

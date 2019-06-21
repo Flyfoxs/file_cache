@@ -1,14 +1,6 @@
 import numpy as np
 import pandas as pd
 
-from file_cache.utils.util_log import *
-
-def replace_invalid_filename_char(filename):
-    invalid_characaters = '\':"<>|{} ,'
-    for char in invalid_characaters:
-        filename = filename.replace(char, '')
-    return filename
-
 
 def is_mini_args(item):
     if isinstance(item, (str,int,float)):
@@ -50,7 +42,7 @@ def replace_useless_mark(input : str, replace_list = ['\t', '\n','  '], new_val 
 
 def get_all_file(path):
     import os
-    logger.debug(f'Try to read file from"{path}')
+    #logger.debug(f'Try to read file from"{path}')
     file_list = os.listdir(path)
     file_list = [file for file in file_list if '.h5' in file]
     return file_list
@@ -108,7 +100,7 @@ def print_imp_list( train, clf, order_by_wight=True, show_zero=True):
         import_sn = 0
         for (key, value, dtype) in imp_list:
             import_sn += 1
-            logger.info("%03d: %s, %s, %s" % ( import_sn, str(key).ljust(35), str(value).ljust(5), dtype))
+            #logger.info("%03d: %s, %s, %s" % ( import_sn, str(key).ljust(35), str(value).ljust(5), dtype))
 
         print(f'Full List:{len(train.columns)}, Zero List:{len(zero_list)}, ')
 
@@ -124,10 +116,10 @@ def get_gpu_paras(kind='lgb'):
             gpu_params = {'device': 'gpu', 'gpu_platform_id': 0,'gpu_device_id': 0}
         else:
             gpu_params = {'tree_method': 'gpu_hist', 'predictor': 'gpu_predictor'}
-        logger.debug(f"GPU is enable with{kind}, :{gpu_params}")
+        #logger.debug(f"GPU is enable with{kind}, :{gpu_params}")
 
     else:
-        logger.debug("GPU is disable")
+        #logger.debug("GPU is disable")
         gpu_params = {}
     return gpu_params
 
@@ -158,10 +150,12 @@ def estimate_f1_score(prediction, label, verbose=True):
         f1 = round(f1_score(label, prediction_new),5)
         result[threshold] = f1
         if verbose:
-            logger.debug(f'threshold:{round(threshold, 2)}, f1:{round(f1, 5)}')
+            pass
+            #logger.debug(f'threshold:{round(threshold, 2)}, f1:{round(f1, 5)}')
     result  = result.items()
     result = sorted(result, key= lambda val: val[1], reverse=True)
     return result[0]
 
 if __name__ == '__main__' :
-    logger.debug(get_pretty_info({'feature_fraction': 0.7, 'max_depth': 8, 'reg_alpha': 0.8, 'reg_lambda': 90},))
+    pass
+    #logger.debug(get_pretty_info({'feature_fraction': 0.7, 'max_depth': 8, 'reg_alpha': 0.8, 'reg_lambda': 90},))

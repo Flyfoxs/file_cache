@@ -1,6 +1,7 @@
 
 import logging
-
+import numpy as np
+import pandas as pd
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
@@ -22,6 +23,14 @@ def get_mini_args(args):
     from file_cache.utils.other import get_pretty_info
     return get_pretty_info(args)
 
+def ex_type_name(item):
+
+    if isinstance(item,(np.ndarray, pd.DataFrame) ):
+        return f'{type(item).__name__}:{item.shape}'
+    elif isinstance(item,(set, list, tuple, dict) ):
+        return f'{type(item).__name__}:{len(item)}'
+    else:
+        return type(item).__name__
 
 import functools
 import time
@@ -39,12 +48,12 @@ def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
         def inner(*args, **kwargs):
             start = time.time()
             from file_cache.utils.other import is_mini_args
-            args_mini = [item  if is_mini_args(item) else type(item).__name__ for item in args  ]
+            args_mini = [item  if is_mini_args(item) else ex_type_name(item) for item in args  ]
 
-            kwargs_mini = [ (k, v ) if is_mini_args(v) else (k, type(v).__name__) for k, v in kwargs.items()]
+            kwargs_mini = [ (k, v ) if is_mini_args(v) else (k, ex_type_name(v)) for k, v in kwargs.items()]
             arg_count = len(args) + len(kwargs)
             if paras:
-                log(replace_useless_mark("%s begin with(%s paras) :%r, %r" % (fn.__name__, arg_count, args_mini, kwargs_mini)))
+                log(replace_useless_mark("%s begin with(%s paras) :%s, %s" % (fn.__name__, arg_count, args_mini, kwargs_mini)))
             else:
                 log(f"{fn.__name__} begin with {arg_count} paras")
             try:
@@ -99,4 +108,4 @@ def test(a, b):
     raise Exception('XXX')
 
 if __name__ == '__main__':
-    test()
+    test(pd.DataFrame(), None)

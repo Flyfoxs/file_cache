@@ -10,10 +10,11 @@ core function is copy from below link, just wrap it with decorator
 https://www.kaggle.com/artgor/elo-eda-and-models
 
 """
-
+from file_cache.utils.util_log import timed
 
 def reduce_mem():
     def decorator(fn):
+        @timed()
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
             val = fn(*args, **kwargs)

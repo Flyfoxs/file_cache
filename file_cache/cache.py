@@ -33,6 +33,8 @@ class Cache_File:
                         return pd.read_hdf(path, key_list[0])
                     else:
                         return tuple([ pd.read_hdf(path, key) for key in key_list])
+                elif file_type == 'pickle':
+                    return pd.read_pickle(path)
 
             else:
                 logger.debug(f"Can not find cache from file:{path}")
@@ -61,6 +63,8 @@ class Cache_File:
                     key = f'{self.df_key}_{index}'
                     logger.debug(f"====Write {len(df)} records to File#{path}, with:{key}")
                     df.to_hdf(path, key)
+            elif file_type == 'pickle':
+                pd.to_pickle(val, path)
             return val
         else:
             logger.warning(f'The return is not DataFrame or it is None:{[ isinstance(item, pd.DataFrame) for item in val_tuple]}')
@@ -69,14 +73,14 @@ class Cache_File:
 cache =  Cache_File()
 
 import functools
-def file_cache(overwrite=False, type='h5', prefix=None):
+def file_cache(overwrite=False, type='pickle', prefix=None):
     """
     :param time: How long the case can keep, default is 1 week
     :param overwrite: If force overwrite the cache
     :return:
     """
     def decorator(f):
-        @timed()
+        #@timed()
         @functools.wraps(f)
         def wrapper(*args, **kwargs):
 
@@ -124,7 +128,7 @@ def is_support_cache(*args, **kwargs):
 if __name__ == '__main__':
 
     @timed()
-    @file_cache()
+    @file_cache(type='pickle')
     def test_cache(name):
         import time
         import numpy  as np
@@ -133,7 +137,7 @@ if __name__ == '__main__':
 
 
     @timed()
-    @file_cache()
+    @file_cache(type='pickle')
     def test_cache_2(name):
         import time
         import numpy  as np
@@ -143,9 +147,14 @@ if __name__ == '__main__':
 
 
     print(test_cache('Felix'))
-    print(test_cache_2('Felix'))
+    #print(test_cache_2('Felix'))
     df = test_cache('Felix')
-    test_cache(df)
+    df = test_cache('Felix')
+    df = test_cache('Felix')
+    df = test_cache('Felix')
+    df = test_cache('Felix')
+
+    #test_cache(df)
     #print(test_cache('Felix'))
 
 

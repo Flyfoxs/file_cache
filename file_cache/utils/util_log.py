@@ -53,14 +53,14 @@ def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
             kwargs_mini = [ (k, v ) if is_mini_args(v) else (k, ex_type_name(v)) for k, v in kwargs.items()]
             arg_count = len(args) + len(kwargs)
             if paras:
-                log(replace_useless_mark("%s begin with(%s paras) :%s, %s" % (fn.__name__, arg_count, args_mini, kwargs_mini)))
+                log(replace_useless_mark("FN#%s begin with(%s paras) :%s, %s" % (fn.__name__, arg_count, args_mini, kwargs_mini)))
             else:
                 log(f"{fn.__name__} begin with {arg_count} paras")
             try:
                 result = fn(*args, **kwargs)
             except Exception as e:
                 logger.exception(e)
-                logger.error(f'Exception from: {fn.__name__}({args_mini}, {kwargs_mini}), end with:{type(e)}')
+                logger.error(f'Exception from: FN#{fn.__name__}({args_mini}, {kwargs_mini}), end with:{type(e)}')
 
                 raise e
             duration = time.time() - start
@@ -68,7 +68,7 @@ def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
                 duration = f'{duration:04.1f} sec'
             else:
                 duration = f'{duration/60.0:04.1f} min'
-            log(replace_useless_mark(f'cost {duration}:{fn.__name__}({args_mini}, {kwargs_mini}), return:{summary_result(result)}, end '))
+            log(replace_useless_mark(f'<<cost {duration}>>:FN#{fn.__name__}({args_mini}, {kwargs_mini}), return:{summary_result(result)}, end '))
 
 
             #logger.log(level, format, repr(fn), duration * 1000)
@@ -92,6 +92,33 @@ def summary_result(result):
     else :
         return type(result).__name__,
 
+import contextlib
+import datetime
+
+@contextlib.contextmanager
+def timed_bolck(name='Default_block'):
+    import sys
+
+    begin = datetime.datetime.now()
+    logger.info(f'BLOCK#{name}, begin at:{str(begin)[11:19]},id#{id(begin)}')
+    try:
+        exception = None
+        yield begin
+    except Exception as e:
+        exception = e
+        logger.exception(e)
+    finally:
+        end = datetime.datetime.now()
+        duration = (end - begin).total_seconds()
+        if duration < 60:
+            duration = f'{duration:04.1f} sec'
+        else:
+            duration = f'{duration/60.0:04.1f} min'
+        if exception is not None:
+            logger.info(f'BLOCK#{name}, End with Exception:{type(exception).__name__}, <<cost {duration}>>, end at:{str(end)[11:19]}, id#{id(begin)}')
+        else:
+            logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end at:{str(end)[11:19]}, id#{id(begin)}')
+
 
 #@timed(level='info')
 def logger_begin_paras(paras):
@@ -103,9 +130,12 @@ def logger_begin_paras(paras):
 print('yes')
 logger_begin_paras("Load module")
 
-@timed()
+#@timed()
 def test(a, b):
     raise Exception('XXX')
 
 if __name__ == '__main__':
-    test(pd.DataFrame(), None)
+
+
+    with timed_bolck():
+        test(pd.DataFrame(), None)

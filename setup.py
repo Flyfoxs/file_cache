@@ -8,7 +8,7 @@ with open('README.md') as file:
 
 setup(
     name='file_cache',
-    version='0.1.25',
+    version='0.1.32',
     description='Cache dataframe with local hd5 file, and reduce the memory by convert type for number',
     long_description='File_cache can help you cache the pandas result with hd5 file, You can get demo from: https://github.com/Flyfoxs/file_cache/blob/master/demo.ipynb',
     url='https://github.com/Flyfoxs/file_cache',

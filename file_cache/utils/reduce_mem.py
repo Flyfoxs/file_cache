@@ -3,14 +3,14 @@ import functools
 import numpy as np
 import pandas as pd
 
-from file_cache.utils.util_log import logger, timed_bolck
+from file_cache.utils.util_log import logger, timed_bolck, ex_type_name
 
 """
 core function is copy from below link, just wrap it with decorator
 https://www.kaggle.com/artgor/elo-eda-and-models
 
 """
-from file_cache.utils.util_log import timed
+
 
 def reduce_mem():
     def decorator(fn):
@@ -18,7 +18,7 @@ def reduce_mem():
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
             val = fn(*args, **kwargs)
-            with timed_bolck(f'Reduce_Mem({fn.__name__})'):
+            with timed_bolck(f'Reduce_Mem({fn.__name__}:{ex_type_name(val)})'):
                 if isinstance(val, (pd.DataFrame,)) :
                     val = _reduce_mem_usage(val, verbose=True)
                 if isinstance(val, tuple) and all([ isinstance(df, (pd.DataFrame, pd.Series )) for df in val]):
@@ -67,6 +67,8 @@ def _reduce_mem_usage(df, verbose=True):
 
 
 if __name__ == '__main__':
+    from file_cache.cache import file_cache
+    @file_cache()
     @reduce_mem()
     def test_df(test):
         from sklearn import datasets

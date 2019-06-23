@@ -7,6 +7,8 @@
 ## 安装
 pip install file_cache
 
+pip install git+https://github.com/Flyfoxs/file_cache@master
+
 ## 简单示例
 
 

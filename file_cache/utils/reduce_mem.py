@@ -3,7 +3,7 @@ import functools
 import numpy as np
 import pandas as pd
 
-from file_cache.utils.util_log import logger
+from file_cache.utils.util_log import logger, timed_bolck
 
 """
 core function is copy from below link, just wrap it with decorator
@@ -14,16 +14,17 @@ from file_cache.utils.util_log import timed
 
 def reduce_mem():
     def decorator(fn):
-        @timed()
+        #@timed()
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
             val = fn(*args, **kwargs)
-            if isinstance(val, (pd.DataFrame,)) :
-                val = _reduce_mem_usage(val, verbose=True)
-            if isinstance(val, tuple) and all([ isinstance(df, (pd.DataFrame, pd.Series )) for df in val]):
-                val = tuple([  _reduce_mem_usage(df, verbose=True)  for df in val])
-            else:
-                logger.warning(f'The return type for fun#{fn.__name__} is:{type(val)}')
+            with timed_bolck(f'Reduce_Mem({fn.__name__})'):
+                if isinstance(val, (pd.DataFrame,)) :
+                    val = _reduce_mem_usage(val, verbose=True)
+                if isinstance(val, tuple) and all([ isinstance(df, (pd.DataFrame, pd.Series )) for df in val]):
+                    val = tuple([  _reduce_mem_usage(df, verbose=True)  for df in val])
+                else:
+                    logger.warning(f'The return type for fun#{fn.__name__} is:{type(val)}')
             return val
         return wrapper
     return decorator

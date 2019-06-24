@@ -100,7 +100,7 @@ def timed_bolck(name='Default_block'):
     import sys
 
     begin = datetime.datetime.now()
-    logger.info(f'BLOCK#{name}, begin at:{str(begin)[11:19]},id#{id(begin)}')
+    logger.info(f'BLOCK#{name}, begin@{str(begin)[11:19]},id#{id(begin)}')
     try:
         exception = None
         yield begin
@@ -117,7 +117,8 @@ def timed_bolck(name='Default_block'):
         if exception is not None:
             logger.info(f'BLOCK#{name}, End with Exception:{type(exception).__name__}, <<cost {duration}>>, end at:{str(end)[11:19]}, id#{id(begin)}')
         else:
-            logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end at:{str(end)[11:19]}, id#{id(begin)}')
+            logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end@{str(end)[11:19]}, id#{id(begin)}')
+            raise exception
 
 
 #@timed(level='info')
@@ -130,9 +131,10 @@ def logger_begin_paras(paras):
 print('yes')
 logger_begin_paras("Load module")
 
-#@timed()
+@timed()
 def test(a, b):
-    raise Exception('XXX')
+    #raise Exception('XXX')
+    pass
 
 if __name__ == '__main__':
 

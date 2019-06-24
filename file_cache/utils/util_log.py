@@ -116,9 +116,10 @@ def timed_bolck(name='Default_block'):
             duration = f'{duration/60.0:04.1f} min'
         if exception is not None:
             logger.info(f'BLOCK#{name}, End with Exception:{type(exception).__name__}, <<cost {duration}>>, end at:{str(end)[11:19]}, id#{id(begin)}')
+            raise exception
         else:
             logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end@{str(end)[11:19]}, id#{id(begin)}')
-            raise exception
+
 
 
 #@timed(level='info')

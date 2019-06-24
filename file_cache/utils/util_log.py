@@ -106,7 +106,7 @@ def timed_bolck(name='Default_block'):
         yield begin
     except Exception as e:
         exception = e
-        logger.exception(e)
+        #logger.exception(e)
     finally:
         end = datetime.datetime.now()
         duration = (end - begin).total_seconds()

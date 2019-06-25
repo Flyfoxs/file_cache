@@ -37,7 +37,7 @@ def _reduce_mem_usage(df, verbose=True):
     mem = df.memory_usage()
     mem = mem if isinstance(mem, (int, float)) else mem.sum()
     start_mem = mem / 1024**2
-    for col in df.columns:
+    for sn, col in enumerate(df.columns):
         col_type = df[col].dtypes
         if col_type in numerics:
             c_min = df[col].min()
@@ -58,6 +58,10 @@ def _reduce_mem_usage(df, verbose=True):
                     df[col] = df[col].astype(np.float32)
                 else:
                     df[col] = df[col].astype(np.float64)
+            if col_type == df[col].dtypes:
+                logger.info(f'No need to change type for:{col}#{col_type}, {sn}/{len(df.columns)}')
+            else:
+                logger.info(f'Change {col}#{col_type} => {df[col].dtypes}, {sn}/{len(df.columns)}')
     mem = df.memory_usage()
     mem = mem if isinstance(mem, (int, float)) else mem.sum()
     end_mem = mem / 1024**2
@@ -68,7 +72,7 @@ def _reduce_mem_usage(df, verbose=True):
 
 if __name__ == '__main__':
     from file_cache.cache import file_cache
-    @file_cache()
+    #@file_cache()
     @reduce_mem()
     def test_df(test):
         from sklearn import datasets
@@ -76,7 +80,8 @@ if __name__ == '__main__':
         import numpy as np
         data = datasets.load_boston()
         df = pd.DataFrame(data.data, columns=data.feature_names)
-        return df, df.copy(), df.copy()
+        print(df.dtypes)
+        return df#, df.copy(), df.copy()
 
 
     logger.debug(len(test_df('xx')))

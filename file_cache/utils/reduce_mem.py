@@ -54,10 +54,10 @@ def _reduce_mem_usage(df, verbose=True):
             else:
                 if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
                     df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                    df[col] = df[col].astype(np.float32)
                 else:
-                    df[col] = df[col].astype(np.float64)
+                    df[col] = df[col].astype(np.float32)
+                # else:
+                #     df[col] = df[col].astype(np.float64)
             if col_type == df[col].dtypes:
                 logger.info(f'No need to change type for:{col}#{col_type}, {sn}/{len(df.columns)}')
             else:
@@ -66,6 +66,7 @@ def _reduce_mem_usage(df, verbose=True):
     mem = mem if isinstance(mem, (int, float)) else mem.sum()
     end_mem = mem / 1024**2
     if verbose:
+        logger.info(f'Current dtypes:\n {df.dtypes.value_counts()}')
         logger.debug('Mem. usage decreased from {:7.2f} to {:7.2f} Mb ({:.1f}% reduction)'.format(start_mem, end_mem, 100 * (start_mem - end_mem) / start_mem))
     return df
 

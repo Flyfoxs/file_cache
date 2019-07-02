@@ -134,7 +134,7 @@ logger_begin_paras("Load module")
 
 @timed()
 def test(a, b):
-    #raise Exception('XXX')
+    raise Exception('XXX')
     pass
 
 if __name__ == '__main__':

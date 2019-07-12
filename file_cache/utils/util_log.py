@@ -27,6 +27,9 @@ def ex_type_name(item):
 
     if isinstance(item,(np.ndarray, pd.DataFrame) ):
         return f'{type(item).__name__}:{item.shape}'
+    if isinstance(item, (tuple)) and all([ isinstance(one,(pd.DataFrame, np.ndarray) ) for one in item]):
+        return [f'{type(one).__name__}:{one.shape}'  for one in item]
+
     elif isinstance(item,(set, list, tuple, dict) ):
         return f'{type(item).__name__}:{len(item)}'
     else:
@@ -88,15 +91,15 @@ def summary_result(result):
         else:
             return f'DF:{result.shape}'
     elif isinstance(result, (list, dict, set, tuple)):
-        return f'{type(result).__name__}:{len(result)}',
+        return ex_type_name(result)
     else :
-        return type(result).__name__,
+        return type(result).__name__
 
 import contextlib
 import datetime
 
 @contextlib.contextmanager
-def timed_bolck(name='Default_block'):
+def timed_block(name='Default_block'):
     import sys
 
     begin = datetime.datetime.now()
@@ -120,7 +123,7 @@ def timed_bolck(name='Default_block'):
         else:
             logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end@{str(end)[11:19]}, id#{id(begin)}')
 
-
+timed_bolck = timed_block
 
 #@timed(level='info')
 def logger_begin_paras(paras):
@@ -134,11 +137,10 @@ logger_begin_paras("Load module")
 
 @timed()
 def test(a, b):
-    raise Exception('XXX')
-    pass
+    return a, b
 
 if __name__ == '__main__':
 
 
-    with timed_bolck():
-        test(pd.DataFrame(), None)
+    #with timed_bolck():
+        test(pd.DataFrame(), pd.DataFrame())

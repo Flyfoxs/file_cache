@@ -27,7 +27,7 @@ def ex_type_name(item):
 
     if isinstance(item,(np.ndarray, pd.DataFrame) ):
         return f'{type(item).__name__}:{item.shape}'
-    if isinstance(item, (tuple)) and all([ isinstance(one,(pd.DataFrame, np.ndarray) ) for one in item]):
+    if isinstance(item, (tuple)) and all([ isinstance(one,(pd.DataFrame, np.ndarray, pd.Series) ) for one in item]):
         return [f'{type(one).__name__}:{one.shape}'  for one in item]
 
     elif isinstance(item,(set, list, tuple, dict) ):

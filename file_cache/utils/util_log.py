@@ -25,13 +25,15 @@ def get_mini_args(args):
 
 def ex_type_name(item):
 
-    if isinstance(item,(np.ndarray, pd.DataFrame) ):
+    if isinstance(item, (np.ndarray)) and item.ndim==1 and len(item)<=10:
+        return str(item)
+    elif isinstance(item,(np.ndarray, pd.DataFrame) ):
         return f'{type(item).__name__}:{item.shape}'
     #All type in tuple is DF or numpy
-    if isinstance(item, (tuple, list, set)) and all([ isinstance(one,(pd.DataFrame, np.ndarray, pd.Series) ) for one in item]):
+    elif isinstance(item, (tuple, list, set)) and all([ isinstance(one,(pd.DataFrame, np.ndarray, pd.Series) ) for one in item]):
         return [f'{type(one).__name__}:{one.shape}'  for one in item]
     #All type in tuple is simple obj
-    if isinstance(item, (tuple, list, set)) and all([ isinstance(one,(str, int, float) ) for one in item]):
+    elif isinstance(item, (tuple, list, set)) and all([ isinstance(one,(str, int, float) ) for one in item]):
         return [one for one in item]
     elif isinstance(item,(set, list, tuple, dict) ):
         return f'{type(item).__name__}:{len(item)}'

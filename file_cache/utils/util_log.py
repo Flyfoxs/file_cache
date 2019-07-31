@@ -95,7 +95,7 @@ def summary_result(result):
             return 'DF:Empty'
         else:
             return f'DF:{result.shape}'
-    elif isinstance(result, (list, dict, set, tuple)):
+    elif isinstance(result, (list, dict, set, tuple, np.ndarray)):
         return ex_type_name(result)
     else :
         return type(result).__name__
@@ -142,7 +142,7 @@ logger_begin_paras("Load module")
 
 @timed()
 def test(a, b):
-    return a, b, 1.5
+    return np.ones(5)
 
 if __name__ == '__main__':
 

@@ -122,7 +122,12 @@ def is_support_cache(*args, **kwargs):
     return True
 
 
-
+import os
+def adjust_wkdir(cut_folder='notebook'):
+    abspath = os.path.abspath('.')
+    wk_dir = abspath.replace(cut_folder,'')
+    os.chdir(wk_dir)
+    return wk_dir
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import pandas as pd
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
-logging.basicConfig(level=logging.DEBUG, format=format_str)
+#logging.basicConfig(level=logging.DEBUG, format=format_str)
 
 logger = logging.getLogger()
 
@@ -137,7 +137,6 @@ def logger_begin_paras(paras):
     host_ip = socket.gethostbyname(host_name)
     logger.info(f'Start the program at:{host_name}, {host_ip}, with:{paras}')
 
-print('yes')
 logger_begin_paras("Load module")
 
 @timed()

@@ -20,6 +20,25 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+
+    install_requires=[
+        "termcolor>=1.1",
+        "Pillow==6.2.2",  # torchvision currently does not work with Pillow 7
+        "yacs>=0.1.6",
+        "tabulate",
+        "easydict",
+        "nibabel",
+        "pydicom",
+        "cloudpickle",
+        "matplotlib",
+        "tqdm>4.29.0",
+        "tensorboard",
+        "fvcore",
+        "future",  # used by caffe2
+        "pydot",  # used to save caffe2 SVGs
+        "SimpleITK",
+        "plotly",
+    ],
     keywords='pandas file cache python file_cache',
     packages=setuptools.find_packages(),
 )

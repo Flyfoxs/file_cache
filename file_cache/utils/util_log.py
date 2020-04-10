@@ -5,18 +5,18 @@ import pandas as pd
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
-#logging.basicConfig(level=logging.DEBUG, format=format_str)
+logging.basicConfig(level=logging.INFO, format=format_str)
 
 logger = logging.getLogger()
-
+ch = logging.StreamHandler()
+ch.setFormatter(format)
+logger.addHandler(ch)
+logger.setLevel(logging.DEBUG)
 #handler = logging.FileHandler('./log/forecast.log', 'a')
 # handler.setFormatter(format)
 # logger.addHandler(handler)
 
 
-# def is_mini_args(item):
-#     from file_cache.utils.other import is_mini_args
-#     return is_mini_args(item)
 
 
 def get_mini_args(args):
@@ -42,13 +42,16 @@ def ex_type_name(item):
 
 import functools
 import time
-def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
+def timed(paras=True, disable=False):
+    logger_ = logging.getLogger("timed")
+    logger_.setLevel(logging.INFO)
+    logger_.addHandler(ch)
     from file_cache.utils.other import replace_useless_mark
-    if level.lower() == 'info':
-        log = logger.info
-    else:
-        log = logger.debug
 
+    if disable:
+        log = lambda val: val
+    else:
+        log = logger_.info
 
     def decorator(fn):
 
@@ -67,8 +70,8 @@ def timed(logger=logger, level='info', format='%s: %s ms', paras=True):
             try:
                 result = fn(*args, **kwargs)
             except Exception as e:
-                logger.exception(e)
-                logger.error(f'Exception from: FN#{fn.__name__}({args_mini}, {kwargs_mini}), end with:{type(e)}')
+                logger_.exception(e)
+                logger_.error(f'Exception from: FN#{fn.__name__}({args_mini}, {kwargs_mini}), end with:{type(e)}')
 
                 raise e
             duration = time.time() - start
@@ -103,30 +106,37 @@ def summary_result(result):
 import contextlib
 import datetime
 
+
+
+
 @contextlib.contextmanager
 def timed_block(name='Default_block'):
-    import sys
+    logger_ = logging.getLogger("timed_block")
+    logger_.setLevel(logging.INFO)
+    logger_.addHandler(ch)
 
     begin = datetime.datetime.now()
-    logger.info(f'BLOCK#{name}, begin@{str(begin)[11:19]},id#{id(begin)}')
+    logger_.info(f'BLOCK#{name}, begin@{str(begin)[11:19]},id#{id(begin)}')
     try:
         exception = None
         yield begin
     except Exception as e:
         exception = e
-        #logger.exception(e)
+        # logger.exception(e)
     finally:
         end = datetime.datetime.now()
         duration = (end - begin).total_seconds()
         if duration < 60:
             duration = f'{duration:04.1f} sec'
         else:
-            duration = f'{duration/60.0:04.1f} min'
+            duration = f'{duration / 60.0:04.1f} min'
         if exception is not None:
-            logger.info(f'BLOCK#{name}, End with Exception:{type(exception).__name__}, <<cost {duration}>>, end at:{str(end)[11:19]}, id#{id(begin)}')
+            logger_.info(
+                f'BLOCK#{name}, End with Exception:{type(exception).__name__}, <<cost {duration}>>, end at:{str(end)[11:19]}, id#{id(begin)}')
             raise exception
         else:
-            logger.info(f'<<cost {duration}>>:BLOCK#{name}, , end@{str(end)[11:19]}, id#{id(begin)}')
+            logger_.info(f'<<cost {duration}>>:BLOCK#{name}, , end@{str(end)[11:19]}, id#{id(begin)}')
+
 
 timed_bolck = timed_block
 

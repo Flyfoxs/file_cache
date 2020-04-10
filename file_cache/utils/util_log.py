@@ -5,18 +5,17 @@ import pandas as pd
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
-logging.basicConfig(level=logging.INFO, format=format_str)
-
-logger = logging.getLogger()
 ch = logging.StreamHandler()
 ch.setFormatter(format)
-logger.addHandler(ch)
-logger.setLevel(logging.DEBUG)
+
+logging.basicConfig(level=logging.WARNING, format=format_str, handlers=[ch])
+
+logger = logging.getLogger('main')
+
+#logger.setLevel(logging.DEBUG)
 #handler = logging.FileHandler('./log/forecast.log', 'a')
 # handler.setFormatter(format)
 # logger.addHandler(handler)
-
-
 
 
 def get_mini_args(args):
@@ -45,7 +44,7 @@ import time
 def timed(paras=True, disable=False):
     logger_ = logging.getLogger("timed")
     logger_.setLevel(logging.INFO)
-    logger_.addHandler(ch)
+    #logger_.addHandler(ch)
     from file_cache.utils.other import replace_useless_mark
 
     if disable:
@@ -113,7 +112,7 @@ import datetime
 def timed_block(name='Default_block'):
     logger_ = logging.getLogger("timed_block")
     logger_.setLevel(logging.INFO)
-    logger_.addHandler(ch)
+    #logger_.addHandler(ch)
 
     begin = datetime.datetime.now()
     logger_.info(f'BLOCK#{name}, begin@{str(begin)[11:19]},id#{id(begin)}')

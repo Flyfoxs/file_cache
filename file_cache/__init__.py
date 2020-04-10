@@ -1,4 +1,4 @@
-from .utils.util_log import timed_bolck, timed
+from .utils.util_log import timed_block, timed
 from .utils.notebook import adjust_wkdir
 from .cache import file_cache
 from .utils.reduce_mem import *

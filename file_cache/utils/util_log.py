@@ -8,7 +8,7 @@ format = logging.Formatter(format_str)
 ch = logging.StreamHandler()
 ch.setFormatter(format)
 
-logging.basicConfig(level=logging.WARNING, format=format_str, handlers=[ch])
+logging.basicConfig(level=logging.INFO, format=format_str, handlers=[ch])
 
 logger = logging.getLogger('main')
 

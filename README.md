@@ -9,6 +9,8 @@ pip install file_cache
 
 pip install git+https://github.com/Flyfoxs/file_cache@master
 
+pip uninstall file_cache -y
+
 ## 简单示例
 
 

@@ -6,7 +6,7 @@ import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
 
-from file_cache.utils.util_log import logger, timed
+from util_log import logger, timed
 try:
     plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
     plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
@@ -81,28 +81,3 @@ def flat_columns(df, prefix=None):
 
 def drop_empty_item(item):
     return [str(val) for val in item if val is not None and len(str(val))>0]
-
-
-def save_result_for_ensemble(sub_folder, file_name, **kwargs, ):
-    """"
-    name = '{score}_name'
-    """
-    import os
-    folder = f'./output/1level/{sub_folder}'
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-
-    file = f'./output/1level/{sub_folder}/{file_name}.h5'
-    from file_cache.utils.other import replace_invalid_filename_char
-    file = replace_invalid_filename_char(file)
-    store = pd.HDFStore(file)
-
-    if kwargs is not None:
-        for key, value in kwargs.items():
-            if key is not None:
-                store[f'{key}'] = value
-                logger.debug(f'Stove {key} to file#{file}  , size:{value.shape}')
-
-    store.close()
-    logger.debug(f"Ensamble file save to file: {file}")
-    return file

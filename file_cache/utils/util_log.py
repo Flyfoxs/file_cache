@@ -2,6 +2,7 @@
 import logging
 import numpy as np
 import pandas as pd
+from other import is_mini_args
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)
@@ -12,18 +13,36 @@ logging.basicConfig(level=logging.INFO, format=format_str, handlers=[ch])
 
 logger = logging.getLogger('main')
 
-#logger.setLevel(logging.DEBUG)
-#handler = logging.FileHandler('./log/forecast.log', 'a')
-# handler.setFormatter(format)
-# logger.addHandler(handler)
+
+def replace_useless_mark(input : str, replace_list = ['\t', '\n','  '], new_val = ' '):
+    input = str(input)
+    for old in replace_list:
+        input = input.replace(old, new_val)
+    return input
+
+
+def get_pretty_info(args):
+    if isinstance(args,(list, tuple)) and len(args)>0:
+        mini =  [str(item) if is_mini_args(item) else type(item).__name__ for item in args]
+        return replace_useless_mark(','.join(mini))
+    elif isinstance(args, (dict)) and len(args)>0:
+        mini = [f'{k}={v}' if is_mini_args(v) else f'{k}={type(v).__name__}' for k, v in args.items()]
+        return replace_useless_mark(','.join(mini))
+    elif '__len__' in dir(args) and len(args)==0:
+        return ''
+    elif isinstance(args, (str, float, int)):
+        return args
+    elif args is None:
+        return 'None'
+    else:
+        return replace_useless_mark(type(args).__name__)
 
 
 def get_mini_args(args):
-    from file_cache.utils.other import get_pretty_info
     return get_pretty_info(args)
 
-def ex_type_name(item):
 
+def ex_type_name(item):
     if isinstance(item, (np.ndarray)) and item.ndim==1 and len(item)<=10:
         return str(item)
     elif isinstance(item,(np.ndarray, pd.DataFrame) ):
@@ -39,13 +58,13 @@ def ex_type_name(item):
     else:
         return type(item).__name__
 
+
+
 import functools
 import time
 def timed(paras=True, disable=False):
     logger_ = logging.getLogger("timed")
     logger_.setLevel(logging.INFO)
-    #logger_.addHandler(ch)
-    from file_cache.utils.other import replace_useless_mark
 
     if disable:
         log = lambda val: val
@@ -57,10 +76,12 @@ def timed(paras=True, disable=False):
         @functools.wraps(fn)
         def inner(*args, **kwargs):
             start = time.time()
-            from file_cache.utils.other import is_mini_args
-            args_mini = [item  if is_mini_args(item) else ex_type_name(item) for item in args  ]
+            from other import is_mini_args
 
-            kwargs_mini = [ (k, v ) if is_mini_args(v) else (k, ex_type_name(v)) for k, v in kwargs.items()]
+            """print simple object directly and customize complex object"""
+            args_mini = [item if is_mini_args(item) else ex_type_name(item) for item in args]
+            kwargs_mini = [(k, v) if is_mini_args(v) else (k, ex_type_name(v)) for k, v in kwargs.items()]
+
             arg_count = len(args) + len(kwargs)
             if paras:
                 log(replace_useless_mark("FN#%s begin with(%s paras) :%s, %s" % (fn.__name__, arg_count, args_mini, kwargs_mini)))
@@ -104,10 +125,6 @@ def summary_result(result):
 
 import contextlib
 import datetime
-
-
-
-
 @contextlib.contextmanager
 def timed_block(name='Default_block'):
     logger_ = logging.getLogger("timed_block")
@@ -143,7 +160,10 @@ timed_bolck = timed_block
 def logger_begin_paras(paras):
     import socket
     host_name = socket.gethostname()
-    host_ip = socket.gethostbyname(host_name)
+    try:
+        host_ip = socket.gethostbyname(host_name)
+    except Exception as e:
+        host_ip = socket.getfqdn()
     logger.info(f'Start the program at:{host_name}, {host_ip}, with:{paras}')
 
 logger_begin_paras("Load module")

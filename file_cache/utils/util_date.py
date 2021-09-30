@@ -1,6 +1,6 @@
 import datetime
 
-from file_cache.utils.util_log import *
+from util_log import *
 
 
 def convert_week_sn(week_sn, base_time='2012-01-01'):
@@ -39,7 +39,6 @@ def convert_date(time, input_type=None):
     except :
         logger.warning("Error convert time:%s with%s" % (time,format) )
         return None
-
 
 
 def convert_monday(date):

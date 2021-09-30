@@ -3,7 +3,7 @@ import functools
 import numpy as np
 import pandas as pd
 
-from file_cache.utils.util_log import logger, timed_bolck, ex_type_name
+from util_log import logger, timed_bolck, ex_type_name
 
 """
 core function is copy from below link, just wrap it with decorator
@@ -72,7 +72,6 @@ def _reduce_mem_usage(df, verbose=True):
 
 
 if __name__ == '__main__':
-    from file_cache.cache import file_cache
     #@file_cache()
     @reduce_mem()
     def test_df(test):

@@ -1,15 +1,15 @@
 
 import os
-
 import pandas as pd
+from other import is_mini_args
+from util_log import logger, get_mini_args, timed
+import time
 
-from file_cache.utils.util_log import *
-from file_cache.utils.reduce_mem import reduce_mem
 
 class Cache_File:
     def __init__(self):
         self.df_key = 'df'
-        self.cache_path='./cache/'
+        self.cache_path='./.cache/'
         self.enable=True
         self.date_list = ['start','close','start_base','weekbegin', 'tol_day_cnt_min',	'tol_day_cnt_max']
         if not os.path.exists(self.cache_path):
@@ -70,7 +70,8 @@ class Cache_File:
             logger.warning(f'The return is not DataFrame or it is None:{[ isinstance(item, pd.DataFrame) for item in val_tuple]}')
             return val
 
-cache =  Cache_File()
+
+cache = Cache_File()
 
 import functools
 def file_cache(overwrite=False, type='pickle', prefix=None):
@@ -83,51 +84,41 @@ def file_cache(overwrite=False, type='pickle', prefix=None):
         #@timed()
         @functools.wraps(f)
         def wrapper(*args, **kwargs):
-
-
             mini_args = get_mini_args(args)
-            mini_kwargs  = get_mini_args(kwargs)
-            #logger.debug(f'fn:{f.__name__}, para:{str(mini_args)}, kw:{str(mini_kwargs)}')
+            mini_kwargs = get_mini_args(kwargs)
+            """Ignore the file cache, if the input parameter don't support cache"""
+            if not is_support_cache(*args, **kwargs):
+                logger.warning(f'Do not support cache for fn:{f.__name__}, para:{str(mini_args)}, kw:{str(kwargs)}')
+                return f(*args, **kwargs)
+
             key = '='.join([f.__name__, str(mini_args), str(mini_kwargs)])
-            key = key.replace('.','_')
+            key = key.replace('.', '_')
             key = key.replace('/', '_')
             while '__' in key:
                 key = key.replace('__', '_')
 
-            if not is_support_cache(*args, **kwargs):
-                logger.warning(f'Don not support cache for fn:{f.__name__}, para:{str(mini_args)}, kw:{str(kwargs)}')
-                return f(*args, **kwargs)
-
             if prefix:
-                key  = '_'.join([prefix, key])
-            if overwrite==False:
+                key = '_'.join([prefix, key])
+            if overwrite is False:
                 val = cache.readFile(key, type)
-            if overwrite==True or val is None :
-                val = f(*args, **kwargs) # call the wrapped function, save in cache
+            if val is None or overwrite is True:
+                val = f(*args, **kwargs) #call the wrapped function, save in cache
                 cache.writeFile(key, val, type)
             return val # read value from cache
         return wrapper
     return decorator
 
+
 def is_support_cache(*args, **kwargs):
-    from file_cache.utils.other import is_mini_args
     for arg in args:
         if not is_mini_args(arg) and arg is not None:
             logger.debug(f'There is {type(arg).__name__} in the args')
             return False
-    for _ , arg in kwargs.items():
+    for _, arg in kwargs.items():
         if not is_mini_args(arg) and arg is not None:
             logger.debug(f'There is {type(arg).__name__} in the kwargs')
             return False
     return True
-
-
-import os
-def adjust_wkdir(cut_folder='notebook'):
-    abspath = os.path.abspath('.')
-    wk_dir = abspath.replace(cut_folder,'')
-    os.chdir(wk_dir)
-    return wk_dir
 
 
 if __name__ == '__main__':
@@ -144,8 +135,7 @@ if __name__ == '__main__':
     @timed()
     @file_cache(type='pickle')
     def test_cache_2(name):
-        import time
-        import numpy  as np
+
         time.sleep(3)
         df = pd.DataFrame(data= np.arange(0,10).reshape(2,5))
         return (df, df)

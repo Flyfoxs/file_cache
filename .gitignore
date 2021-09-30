@@ -6,6 +6,7 @@ src/version.js
 junit.xml
 coverage/
 .docz/
+.cache
 
 # YALC (for Erik)
 .yalc

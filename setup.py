@@ -38,6 +38,7 @@ setup(
 #         "pydot",  # used to save caffe2 SVGs
 #         "SimpleITK",
 #         "plotly",
+        "monthdelta",
     ],
     keywords='pandas file cache python file_cache',
     packages=setuptools.find_packages(),

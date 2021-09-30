@@ -2,7 +2,7 @@
 import logging
 import numpy as np
 import pandas as pd
-from other import is_mini_args
+from file_cache.utils.other import is_mini_args
 
 format_str = '%(asctime)s %(filename)s[%(lineno)d] %(levelname)s %(message)s'
 format = logging.Formatter(format_str)

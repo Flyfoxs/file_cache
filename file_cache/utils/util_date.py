@@ -1,6 +1,6 @@
 import datetime
 
-from util_log import *
+from file_cache.utils.util_log import *
 
 
 def convert_week_sn(week_sn, base_time='2012-01-01'):

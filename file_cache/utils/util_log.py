@@ -76,7 +76,6 @@ def timed(paras=True, disable=False):
         @functools.wraps(fn)
         def inner(*args, **kwargs):
             start = time.time()
-            from other import is_mini_args
 
             """print simple object directly and customize complex object"""
             args_mini = [item if is_mini_args(item) else ex_type_name(item) for item in args]

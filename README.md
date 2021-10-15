@@ -9,13 +9,15 @@ pip install file_cache
 
 pip install git+https://github.com/Flyfoxs/file_cache@master
 
+cd file_cache; pip install -e .
+
 pip uninstall file_cache -y
 
 ## 简单示例
 
 
 ```python
-from  file_cache.cache import file_cache
+from  file_cache.utils.cache import file_cache
 import numpy  as np
 import pandas as pd
 
@@ -140,7 +142,7 @@ print(log_time("hello"))
 
 
 ```python
-from  file_cache.cache import file_cache
+from  file_cache.utils.cache import file_cache
 @file_cache()
 def get_train_data():
     from sklearn import datasets

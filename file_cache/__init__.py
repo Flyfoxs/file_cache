@@ -4,16 +4,6 @@ from file_cache.utils.cache import file_cache
 from file_cache.utils.reduce_mem import *
 from file_cache.utils.tqdm_enhance import *
 
-
-
-#from .utils.util_pandas import *
-
-# try:
-#     from pyforest import *
-# except Exception:
-#     print('Warning: Import pyforest, No impact at all')
-
-
 try:
     import os
     import sys
@@ -23,30 +13,19 @@ try:
     import pandas as pd
     import numpy as np
     from easydict import EasyDict as edict
-
-    # from tqdm import tqdm
-    # from glob import glob
-
+    from tqdm import tqdm
+    from glob import glob
     import pprint; pp = pprint.PrettyPrinter(indent=4)
-
     import warnings; warnings.filterwarnings("ignore")
-
-    import cv2
-
-    # import nibabel as nib
-    # import pydicom
-
     from .utils.notebook import adjust_wkdir
 
 except Exception as e:
-    print(e)
-    print('Warning: Import Error, No big impact')
+    print('Warning: Some lib import error, No big impact')
 
 
 try:
     if in_notebook():
         adjust_wkdir()
-        from visual import *
 except Exception as e:
     print('Adjust wk folder for notebook failed')
 

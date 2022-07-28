@@ -2,9 +2,9 @@
 from setuptools import setup
 import setuptools
 
-
-with open('README.md') as file:
-    long_description = file.read()
+#
+# with open('README.md') as file:
+#     long_description = file.read()
 
 setup(
     name='file_cache',

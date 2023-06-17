@@ -4,6 +4,7 @@ import pandas as pd
 from file_cache.utils.other import is_mini_args
 from file_cache.utils.util_log import logger, get_mini_args, timed
 import time
+import numpy as np
 
 
 class Cache_File:
@@ -35,6 +36,8 @@ class Cache_File:
                         return tuple([ pd.read_hdf(path, key) for key in key_list])
                 elif file_type == 'pickle':
                     return pd.read_pickle(path)
+                elif file_type == 'parquet':
+                    return pd.read_parquet(path)
 
             else:
                 logger.debug(f"Can not find cache from file:{path}")
@@ -65,6 +68,8 @@ class Cache_File:
                     df.to_hdf(path, key)
             elif file_type == 'pickle':
                 pd.to_pickle(val, path)
+            elif file_type == 'parquet':
+                val.to_parquet(path)
             return val
         else:
             logger.warning(f'The return is not DataFrame or it is None:{[ isinstance(item, pd.DataFrame) for item in val_tuple]}')
@@ -124,7 +129,7 @@ def is_support_cache(*args, **kwargs):
 if __name__ == '__main__':
 
     @timed()
-    @file_cache(type='pickle')
+    @file_cache(type='parquet')
     def test_cache(name):
         import time
         import numpy  as np
@@ -133,7 +138,7 @@ if __name__ == '__main__':
 
 
     @timed()
-    @file_cache(type='pickle')
+    @file_cache(type='parquet')
     def test_cache_2(name):
 
         time.sleep(3)
